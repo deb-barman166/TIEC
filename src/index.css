@@ -28,6 +28,19 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
+
+  /* Global Neon Glow Effects */
+  input:focus, textarea:focus, select:focus {
+    @apply shadow-[0_0_15px_rgba(0,245,255,0.4)] border-accent-cyan outline-none transition-shadow duration-300;
+  }
+  
+  button:active, a:active {
+    @apply shadow-[0_0_20px_rgba(124,58,237,0.6)] transition-all duration-150;
+  }
+
+  .glass-panel:active {
+    @apply shadow-[0_0_25px_rgba(0,245,255,0.3)] transition-shadow duration-150;
+  }
 }
 
 @layer utilities {

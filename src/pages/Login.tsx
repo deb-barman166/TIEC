@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Mail, Lock, LogIn, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useData } from '../context/DataContext';
+import Logo from '../components/Logo';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -56,7 +57,8 @@ export default function Login() {
         </button>
 
         <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
-          <div className="text-center mb-10">
+          <div className="text-center mb-10 flex flex-col items-center">
+            <Logo className="mb-6" />
             <h1 className="text-3xl font-heading font-bold text-white mb-2">TIEC <span className="gradient-text neon-text-cyan">Portal</span></h1>
             <p className="text-text-secondary text-sm">Sign in to access your dashboard</p>
           </div>
@@ -77,7 +79,7 @@ export default function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all" 
+                  className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all" 
                   placeholder="student@tiec.edu" 
                 />
               </div>
@@ -92,7 +94,7 @@ export default function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-purple focus:ring-1 focus:ring-accent-purple transition-all" 
+                  className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all" 
                   placeholder="••••••••" 
                 />
               </div>

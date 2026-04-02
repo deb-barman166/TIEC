@@ -45,7 +45,7 @@ export default function Skills() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -5, scale: 1.05 }}
-              className={`glass-panel p-8 rounded-2xl border ${skill.border} hover:shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-all duration-300 group flex flex-col items-center text-center`}
+              className={`glass-panel p-8 rounded-2xl border ${skill.border} hover:shadow-[0_0_30px_rgba(0,245,255,0.4)] transition-all duration-300 group flex flex-col items-center text-center`}
             >
               <div className={`w-16 h-16 rounded-2xl ${skill.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                 <skill.icon className={`w-8 h-8 ${skill.color}`} />

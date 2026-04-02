@@ -63,7 +63,7 @@ export default function Reviews() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -5, scale: 1.02 }}
-              className="glass-panel p-8 rounded-2xl border border-white/5 hover:border-accent-purple/30 transition-all duration-300 group relative overflow-hidden flex flex-col h-full"
+              className="glass-panel p-8 rounded-2xl border border-white/5 hover:border-accent-purple/50 hover:shadow-[0_0_30px_rgba(124,58,237,0.3)] transition-all duration-300 group relative overflow-hidden flex flex-col h-full"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               

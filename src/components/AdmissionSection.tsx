@@ -1,10 +1,13 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CalendarX, CheckCircle2, User, Phone, MapPin, Users, BookOpen, X, ArrowRight } from 'lucide-react';
+import { CalendarX, CheckCircle2, User, Phone, MapPin, Users, BookOpen, X, ArrowRight, Mail } from 'lucide-react';
 import { useData } from '../context/DataContext';
+import AnimatedDropdown from './AnimatedDropdown';
+import { coursesData } from './Courses';
+import ConfirmModal from './ConfirmModal';
 
 export default function AdmissionSection() {
-  const { admissionStartDate, admissionEndDate } = useData();
+  const { admissionStartDate, admissionEndDate, admissionApplications, setAdmissionApplications, groups } = useData();
   const startDate = new Date(admissionStartDate);
   const endDate = new Date(admissionEndDate);
   const currentDate = new Date();
@@ -12,13 +15,31 @@ export default function AdmissionSection() {
   const isAdmissionOpen = currentDate >= startDate && currentDate <= endDate;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: '', age: '', gender: '', address: '', contactNumber: '', fatherName: '', motherName: '', course: ''
+    name: '', email: '', age: '', gender: '', address: '', contactNumber: '', fatherName: '', motherName: '', course: ''
   });
+
+  const availableCourses = useMemo(() => {
+    const allCourses = coursesData.flatMap(c => c.items);
+    return allCourses.map(course => ({ value: course.name, label: course.name }));
+  }, []);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    setShowConfirm(true);
+  };
+
+  const confirmSubmit = () => {
+    const newApplication = {
+      ...formData,
+      id: Math.random().toString(36).substr(2, 9),
+      date: new Date().toISOString(),
+      status: 'pending' as const
+    };
+    setAdmissionApplications([newApplication, ...admissionApplications]);
+    setShowConfirm(false);
     setIsSubmitted(true);
   };
 
@@ -26,7 +47,7 @@ export default function AdmissionSection() {
     setIsModalOpen(false);
     setTimeout(() => {
       setIsSubmitted(false);
-      setFormData({ name: '', age: '', gender: '', address: '', contactNumber: '', fatherName: '', motherName: '', course: '' });
+      setFormData({ name: '', email: '', age: '', gender: '', address: '', contactNumber: '', fatherName: '', motherName: '', course: '' });
     }, 500);
   };
 
@@ -153,35 +174,45 @@ export default function AdmissionSection() {
                           <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Full Name</label>
                           <div className="relative">
                             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
-                            <input required type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all" placeholder="John Doe" />
+                            <input required type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all" placeholder="John Doe" />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Google Email</label>
+                          <div className="relative">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
+                            <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all" placeholder="youremail@gmail.com" />
                           </div>
                         </div>
 
                         <div className="space-y-2">
                           <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Age</label>
                           <div className="relative">
-                            <input required type="number" min="10" max="100" value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all" placeholder="18" />
+                            <input required type="number" min="10" max="100" value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all" placeholder="18" />
                           </div>
                         </div>
 
                         <div className="space-y-2">
                           <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Gender</label>
-                          <div className="relative">
-                            <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
-                            <select required value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all appearance-none">
-                              <option value="" disabled>Select Gender</option>
-                              <option value="male">Male</option>
-                              <option value="female">Female</option>
-                              <option value="other">Other</option>
-                            </select>
-                          </div>
+                          <AnimatedDropdown 
+                            options={[
+                              { value: 'male', label: 'Male' },
+                              { value: 'female', label: 'Female' },
+                              { value: 'other', label: 'Other' }
+                            ]}
+                            value={formData.gender}
+                            onChange={(val) => setFormData({...formData, gender: val})}
+                            placeholder="Select Gender"
+                            icon={<Users className="w-5 h-5" />}
+                          />
                         </div>
 
                         <div className="space-y-2">
                           <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Contact Number</label>
                           <div className="relative">
                             <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
-                            <input required type="tel" value={formData.contactNumber} onChange={(e) => setFormData({...formData, contactNumber: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all" placeholder="+91 98765 43210" />
+                            <input required type="tel" value={formData.contactNumber} onChange={(e) => setFormData({...formData, contactNumber: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all" placeholder="+91 98765 43210" />
                           </div>
                         </div>
 
@@ -189,7 +220,7 @@ export default function AdmissionSection() {
                           <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Father's Name</label>
                           <div className="relative">
                             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
-                            <input required type="text" value={formData.fatherName} onChange={(e) => setFormData({...formData, fatherName: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all" placeholder="Father's Full Name" />
+                            <input required type="text" value={formData.fatherName} onChange={(e) => setFormData({...formData, fatherName: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all" placeholder="Father's Full Name" />
                           </div>
                         </div>
 
@@ -197,7 +228,7 @@ export default function AdmissionSection() {
                           <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Mother's Name</label>
                           <div className="relative">
                             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
-                            <input required type="text" value={formData.motherName} onChange={(e) => setFormData({...formData, motherName: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all" placeholder="Mother's Full Name" />
+                            <input required type="text" value={formData.motherName} onChange={(e) => setFormData({...formData, motherName: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all" placeholder="Mother's Full Name" />
                           </div>
                         </div>
 
@@ -205,23 +236,19 @@ export default function AdmissionSection() {
                           <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Full Address</label>
                           <div className="relative">
                             <MapPin className="absolute left-4 top-6 w-5 h-5 text-text-secondary" />
-                            <textarea required value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all min-h-[100px]" placeholder="Enter your complete residential address" />
+                            <textarea required value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all min-h-[100px]" placeholder="Enter your complete residential address" />
                           </div>
                         </div>
 
                         <div className="space-y-2 md:col-span-2">
                           <label className="text-xs font-medium text-text-secondary uppercase tracking-wider">Select Course</label>
-                          <div className="relative">
-                            <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
-                            <select required value={formData.course} onChange={(e) => setFormData({...formData, course: e.target.value})} className="w-full bg-bg-surface/50 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all appearance-none">
-                              <option value="" disabled>Select a Course</option>
-                              <option value="web-dev">Full Stack Web Development</option>
-                              <option value="data-science">Data Science & AI</option>
-                              <option value="cyber-security">Cyber Security</option>
-                              <option value="cloud-computing">Cloud Computing & DevOps</option>
-                              <option value="ui-ux">UI/UX Design</option>
-                            </select>
-                          </div>
+                          <AnimatedDropdown 
+                            options={availableCourses}
+                            value={formData.course}
+                            onChange={(val) => setFormData({...formData, course: val})}
+                            placeholder="Select a Course"
+                            icon={<BookOpen className="w-5 h-5" />}
+                          />
                         </div>
                       </div>
 
@@ -236,6 +263,17 @@ export default function AdmissionSection() {
           </div>
         )}
       </AnimatePresence>
+
+      <ConfirmModal
+        isOpen={showConfirm}
+        onCancel={() => setShowConfirm(false)}
+        onConfirm={confirmSubmit}
+        title="Confirm Submission"
+        message="Are you sure you want to submit your admission application? Please ensure all details are correct."
+        confirmText="Submit Application"
+        cancelText="Review Details"
+        variant="info"
+      />
     </section>
   );
 }

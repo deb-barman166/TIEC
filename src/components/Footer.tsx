@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
-import { Facebook, Youtube, Terminal, MapPin, Phone, Mail } from 'lucide-react';
+import { Facebook, Youtube, MapPin, Phone, Mail } from 'lucide-react';
+import Logo from './Logo';
 
 export default function Footer() {
   return (
@@ -10,41 +11,33 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           {/* Brand */}
           <div className="space-y-6">
-            <a href="#home" className="flex items-center gap-2 group">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-cyan to-accent-purple flex items-center justify-center p-[1px]">
-                <div className="w-full h-full bg-bg-surface rounded-lg flex items-center justify-center group-hover:bg-transparent transition-colors duration-300">
-                  <Terminal className="w-5 h-5 text-accent-cyan group-hover:text-bg-base transition-colors duration-300" />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-heading font-bold text-lg tracking-wider text-text-primary leading-tight">
-                  TIEC
-                </span>
-                <span className="text-[10px] text-accent-cyan uppercase tracking-widest font-medium">
-                  Powered by E-Max
-                </span>
-              </div>
+            <a href="#home" className="inline-block">
+              <Logo />
             </a>
-            <p className="text-text-secondary text-sm leading-relaxed">
+            <p className="text-text-secondary text-sm leading-relaxed mt-4">
               Upgrade Your Skills. Build Your Future. Premium computer training institute in Tufanganj, Coochbehar.
             </p>
             <div className="flex items-center gap-4">
-              <a
+              <motion.a
+                whileHover={{ y: -8, scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
                 href="https://www.facebook.com/TIEC2021/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-text-secondary hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,245,255,0.3)]"
+                className="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-text-secondary hover:text-accent-cyan hover:border-accent-cyan/50 transition-colors duration-300 hover:shadow-[0_0_20px_rgba(0,245,255,0.6)]"
               >
                 <Facebook className="w-5 h-5" />
-              </a>
-              <a
+              </motion.a>
+              <motion.a
+                whileHover={{ y: -8, scale: 1.1, rotate: -5 }}
+                whileTap={{ scale: 0.9 }}
                 href="https://youtube.com/@tufanganji.teducationcentr1031"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-text-secondary hover:text-accent-purple hover:border-accent-purple/50 transition-all duration-300 hover:shadow-[0_0_15px_rgba(124,58,237,0.3)]"
+                className="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-text-secondary hover:text-accent-purple hover:border-accent-purple/50 transition-colors duration-300 hover:shadow-[0_0_20px_rgba(124,58,237,0.6)]"
               >
                 <Youtube className="w-5 h-5" />
-              </a>
+              </motion.a>
             </div>
           </div>
 

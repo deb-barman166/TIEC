@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Terminal } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import Logo from './Logo';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,20 +35,8 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="#home" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-cyan to-accent-purple flex items-center justify-center p-[1px]">
-            <div className="w-full h-full bg-bg-surface rounded-lg flex items-center justify-center group-hover:bg-transparent transition-colors duration-300">
-              <Terminal className="w-5 h-5 text-accent-cyan group-hover:text-bg-base transition-colors duration-300" />
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-heading font-bold text-lg tracking-wider text-text-primary leading-tight">
-              TIEC
-            </span>
-            <span className="text-[10px] text-accent-cyan uppercase tracking-widest font-medium">
-              Powered by E-Max
-            </span>
-          </div>
+        <a href="#home" className="block">
+          <Logo />
         </a>
 
         {/* Desktop Nav */}
@@ -56,7 +45,7 @@ export default function Navbar() {
             <a
               key={link.name}
               href={link.href}
-              className="text-sm font-medium text-text-secondary hover:text-accent-cyan transition-colors duration-300 relative group"
+              className="text-sm font-medium text-text-secondary hover:text-accent-cyan hover:neon-text-cyan transition-all duration-300 relative group"
             >
               {link.name}
               <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-accent-cyan transition-all duration-300 group-hover:w-full neon-border-cyan"></span>
@@ -94,7 +83,7 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium text-text-secondary hover:text-accent-cyan transition-colors"
+                  className="text-lg font-medium text-text-secondary hover:text-accent-cyan hover:neon-text-cyan transition-all duration-300"
                 >
                   {link.name}
                 </a>

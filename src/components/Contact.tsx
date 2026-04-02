@@ -1,7 +1,21 @@
+import { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { MapPin, Phone, Mail, Send } from 'lucide-react';
+import AnimatedDropdown from './AnimatedDropdown';
+import { coursesData } from './Courses';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    course: '',
+    message: ''
+  });
+
+  const availableCourses = useMemo(() => {
+    const allCourses = coursesData.flatMap(c => c.items);
+    return allCourses.map(course => ({ value: course.name, label: course.name }));
+  }, []);
   return (
     <section id="contact" className="py-32 relative overflow-hidden bg-bg-surface/50">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent" />
@@ -108,7 +122,9 @@ export default function Contact() {
                 <input
                   type="text"
                   id="name"
-                  className="w-full bg-bg-base border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all duration-300 placeholder:text-white/20"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="w-full bg-bg-base border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all duration-300 placeholder:text-white/20"
                   placeholder="John Doe"
                 />
               </div>
@@ -118,25 +134,21 @@ export default function Contact() {
                 <input
                   type="email"
                   id="email"
-                  className="w-full bg-bg-base border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent-purple focus:ring-1 focus:ring-accent-purple transition-all duration-300 placeholder:text-white/20"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full bg-bg-base border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all duration-300 placeholder:text-white/20"
                   placeholder="john@example.com"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="course" className="text-sm font-medium text-text-secondary uppercase tracking-wider">Interested Course</label>
-                <select
-                  id="course"
-                  defaultValue=""
-                  className="w-full bg-bg-base border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent-cyan focus:ring-1 focus:ring-accent-cyan transition-all duration-300 appearance-none"
-                >
-                  <option value="" disabled>Select a course</option>
-                  <option value="CITA">CITA</option>
-                  <option value="DITA">DITA</option>
-                  <option value="ADITA">ADITA</option>
-                  <option value="WebDev">Web Development</option>
-                  <option value="Other">Other</option>
-                </select>
+                <label className="text-sm font-medium text-text-secondary uppercase tracking-wider">Interested Course</label>
+                <AnimatedDropdown
+                  options={availableCourses}
+                  value={formData.course}
+                  onChange={(val) => setFormData({...formData, course: val})}
+                  placeholder="Select a course"
+                />
               </div>
 
               <div className="flex flex-col gap-2">
@@ -144,7 +156,9 @@ export default function Contact() {
                 <textarea
                   id="message"
                   rows={4}
-                  className="w-full bg-bg-base border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent-purple focus:ring-1 focus:ring-accent-purple transition-all duration-300 placeholder:text-white/20 resize-none"
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  className="w-full bg-bg-base border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all duration-300 placeholder:text-white/20 resize-none"
                   placeholder="How can we help you?"
                 ></textarea>
               </div>
